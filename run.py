@@ -1,15 +1,8 @@
-import os
-import math
-import logging
 import argparse
-from typing import Union, List, Optional, Tuple
+
 import cv2
-import numpy as np
-import scipy.sparse.csr as csr
-import scipy.sparse.csgraph as csgraph
-import matplotlib.pyplot as plt
+
 from img_stitch import ImageStitcher
-from stitch import _StitchImage
 
 
 def run():
