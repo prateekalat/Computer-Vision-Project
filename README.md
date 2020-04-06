@@ -5,7 +5,7 @@
 4. opencv-contrib-python 3.4.2.17
 
 # Execution Instructions
-`python run.py [list of images]`
+`python run.py [list of images] -o [output file]`
 
 # Results
 ## Inputs
