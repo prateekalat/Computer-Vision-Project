@@ -21,3 +21,21 @@
 
 ## Output
 ![](output.jpg)
+
+## Inputs
+![](results/1_in.png)
+
+## Output
+![](results/1_out.png)
+
+##Inputs
+![](results/2_in.png)
+
+##Outputs
+![](results/2_out.png)
+
+##Inputs
+![](results/3_in.png)
+
+##Outputs
+![](results/3_out.png)
