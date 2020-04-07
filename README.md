@@ -1,3 +1,6 @@
+# Algorithm
+![](Algo_Flow.jpg)
+
 # Requirements
 1. scipy
 2. matplotlib

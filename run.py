@@ -6,8 +6,7 @@ from img_stitch import ImageStitcher
 
 
 def run():
-    ''' Driving Function + Argument Handling
-    '''
+    # Driving Function + Argument Handling
     parser = argparse.ArgumentParser(description='Panoramic Stitch')
     parser.add_argument(
         'input', nargs='+',
