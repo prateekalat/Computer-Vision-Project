@@ -28,14 +28,14 @@
 ## Output
 ![](results/1_out.png)
 
-##Inputs
+## Inputs
 ![](results/2_in.png)
 
-##Outputs
+## Outputs
 ![](results/2_out.png)
 
-##Inputs
+## Inputs
 ![](results/3_in.png)
 
-##Outputs
+## Outputs
 ![](results/3_out.png)
