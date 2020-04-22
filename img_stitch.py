@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 import scipy.sparse.csr as csr
 from stitch import _StitchImage
 from utility import *
+import sys
 
 class ImageStitcher:
     def __init__(self, **kwargs):
@@ -23,7 +24,7 @@ class ImageStitcher:
                     self.__class__.__name__, k))
             setattr(self, k, v)
 
-    def add_image(self, image: Union[str, np.ndarray], fname: str=None):
+    def add_image(self, image: Union[str, np.ndarray],flag, fname: str=None):
         if isinstance(image, str):
             if fname is not None:
                 fname = os.path.splitext(os.path.split(image)[1])[0]
@@ -33,12 +34,25 @@ class ImageStitcher:
             img = cv2.cvtColor(image, cv2.COLOR_RGB2RGBA)
         image = _StitchImage(img, name=fname)
         # find features
-        image.find_features()
+        if flag == 1:
+            image.find_features()
+        elif flag == 2:
+            image.find_dense_sift_features()
+        elif flag == 3:
+            image.find_window_based_correlation_features()
+        else:
+            print('Invalid Argument')
+            sys.exit()
         idx = len(self._images)
         self._images.append(image)
 
         for oidx, other in enumerate(self._images[:-1]):
-            match = self.match_features(image, other)
+            if flag == 1:
+                match = self.match_features(image, other)
+            elif flag == 2:
+                match = self.match_dense_sift_features(image, other)
+            elif flag == 3:
+                match = self.match_window_based_correlation_features(image, other)
             # Check matches
             if match is not None:
                 self._matches[(idx, oidx)] = match
@@ -186,6 +200,32 @@ class ImageStitcher:
         print('Matching features of', src.name, dst.name)
         matches = self.matcher.knnMatch(src.feat, dst.feat, k=2)
         good = [i for i, j in matches if i.distance < self.ratio_threshold * j.distance]
+        print(len(matches), 'features matched', len(good), 'of which are good')
+        if len(good) >= self.min_matches:
+            print(src.name, '<=>', dst.name, 'score', len(good))
+            return good
+        return None
+
+    def match_dense_sift_features(self, src: _StitchImage, dst: _StitchImage) -> Optional[List[cv2.DMatch]]:
+        print('Matching dense SIFT features of', src.name, dst.name)
+        matches = self.matcher.knnMatch(src.feat[1], dst.feat[1], k=2)
+        good = [i for i, j in matches if i.distance < self.ratio_threshold * j.distance]
+        print(len(matches), 'features matched', len(good), 'of which are good')
+        if len(good) >= self.min_matches:
+            print(src.name, '<=>', dst.name, 'score', len(good))
+            return good
+        return None
+
+    def match_window_based_correlation_features(self, src: _StitchImage, dst: _StitchImage) -> Optional[List[cv2.DMatch]]:
+        print('Matching window based correlation features of',src.name,dst.name)
+        FLANN_INDEX_KDTREE = 1
+        index_params = dict(algorithm = FLANN_INDEX_KDTREE,trees = 5)
+        search_params = dict(checks = 50)
+        flann = cv2.FlannBasedMatcher(index_params,search_params)
+        src.feat = np.asarray(src.feat,np.float32)
+        dst.feat = np.asarray(dst.feat,np.float32)
+        matches = flann.knnMatch(src.feat,dst.feat,k=2)
+        good = [i for i, j in matches if i.distance < 0.8* j.distance]
         print(len(matches), 'features matched', len(good), 'of which are good')
         if len(good) >= self.min_matches:
             print(src.name, '<=>', dst.name, 'score', len(good))
