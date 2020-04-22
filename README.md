@@ -66,13 +66,13 @@ Output: Panorama Image
 ![](results/taj_output.png)
 
 ## Inputs
-![](images/street1.png)
-![](images/street2.png)
-![](images/street3.png)
-![](images/street4.png)
-![](images/street5.png)
-![](images/street6.png)
-![](images/street7.png)
+![](images/street1.jpg)
+![](images/street2.jpg)
+![](images/street3.jpg)
+![](images/street4.jpg)
+![](images/street5.jpg)
+![](images/street6.jpg)
+![](images/street7.jpg)
 
 ## Outputs
 ![](results/street_output.png)
